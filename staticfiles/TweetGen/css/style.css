@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Courgette');
+
+body {
+  background-color: #303F9F; //material indigo 700
+}
+
+/* positioning and styling fixes */
+.logo {
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+.container {
+  min-width: 420px;
+}
+
+.extra-margin-top{
+  margin-top: 8px;
+}
+
+.extra-margin-bot {
+  margin-bot: 32px;
+}
+
+.extra-margin-top-big{
+  margin-top: 20px;
+}
+
+.trim-jumbotron {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.hidden {
+  display: none;
+}
+
+.custom-footer {
+  color: white;
+}
+
+.custom-footer > a{
+  color: rgb(255, 202, 27);
+}
+
+.give-space{
+  margin-top: 4px;
+}
+
+#output-tweet-text {
+  font-family: 'Courgette', cursive;
+  opacity: 1;
+}
+#output-jumbotron{
+  margin-bottom: 64px;
+}
+@media (max-width: 991px) {
+.row{
+    padding-bottom: 30px;
+  }
+}
+
+.help-button {
+  position: absolute;
+  top: 5px;
+  right: 22px;
+}
+
+#second-col{
+  margin-bottom: 32px;
+}
+
+#logout-button {
+  position: absolute;
+   left: 10px;
+   top: 15px;
+}
+
+.scroll-div {
+  height:170px;
+  overflow-y: scroll;
+}
+
+.height-fix{
+  height: 250px;
+  padding-bottom: 12px;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+}

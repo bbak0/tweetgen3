@@ -29,6 +29,7 @@ def generateTweet(nameArray, userid):
             try:
                 chain = Chain.objects.get(screen_name = name) #todo: add update chain
                 used_chain = updateAndReturnChain(name, chain, t)
+                print(used_chain)
                 chainList.append(used_chain)
             except TwitterHTTPError:
                 pass
@@ -50,7 +51,9 @@ def updateAndReturnChain(name, chain, t):
     if timediff.total_seconds() > UPDATE_THRESHOLD:
         return updateTweets(name, chain, t)
     else:
-        return False
+        oldChain = markovify.NewlineText.from_json(chain.chain)
+        return oldChain
+        
 
 #gets as many tweets as possible(twitter limit ~3000)
 def getAllTweets(name, t):
@@ -62,10 +65,12 @@ def getAllTweets(name, t):
         include_rts="false",
         trim_user="true",
         count = 200,
+        tweet_mode='extended'
         )
 
+    print(tweets)
     for tw in tweets:
-        tweetList.append(tw['text'])
+        tweetList.append(tw['full_text'])
         last_id = tw['id']
 
     while len(tweets) > 0:
@@ -76,10 +81,11 @@ def getAllTweets(name, t):
             include_rts="false",
             trim_user="true",
             count = 200,
+            tweet_mode='extended',
             max_id = maxID - 1,
             )
         for tw in tweets:
-            tweetList.append(tw['text'])
+            tweetList.append(tw['full_text'])
             last_id = tw['id']
 
     return tweetList, last_id
@@ -94,19 +100,20 @@ def updateTweets(name, chain, t):
         exclude_replies = "true",
         include_rts="false",
         trim_user="true",
+        tweet_mode='extended',
         since_id = chain.latest_tweet_id,
         )
     tweetList = []
     for tw in tweets:
-        tweetList.append(tw['text'])
+        tweetList.append(tw['full_text'])
         last_id = tw['id']
     updateChain(name, tweetList, chain, last_id)
 
 #generates markov chain for twitter user
 def generateChain(name, tweetList, last_id):
     text = '\n'.join(tweetList) #separates tweets by newline
-    cleaned_text = re.sub(r'http\S+', '', text) #remove links from text
-    cleaned_text = cleaned_text.replace("&amp;", "&") #fix for '&' symbol
+    text = re.sub(r'https:\/\/t.co\S+', '', text) #remove links from text
+    cleaned_text = text.replace("&amp;", "&") #fix for '&' symbol
     markov = markovify.NewlineText(cleaned_text)
     json_model = markov.to_json() #save model in db
     newChain = Chain(screen_name = name, latest_tweet_id = last_id, chain = json_model)
@@ -118,8 +125,8 @@ def generateChain(name, tweetList, last_id):
 def updateChain(name, tweetList, chain, last_id):
     
     text = '\n'.join(tweetList)
-    cleaned_text = re.sub(r'http\S+', '', text)
-    cleaned_text = cleaned_text.replace("&amp;", "&")
+    text = re.sub(r'https:\/\/t.co\S+', '', text)
+    cleaned_text = text.replace("&amp;", "&")
     oldChain = markovify.NewlineText.from_json(chain.chain)
     newChain = markovify.NewlineText(cleaned_text)
     updatedChain = markovify.combine([oldChain, newChain])

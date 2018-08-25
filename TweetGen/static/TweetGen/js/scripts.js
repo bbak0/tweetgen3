@@ -1,19 +1,43 @@
 
 
-
 $(document).ready(function() {
+
+	$.ajaxSetup({
+		beforeSend: function(xhr, settings) {
+			if (!this.crossDomain) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		}
+	});
+	
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	var csrftoken = getCookie('csrftoken');
 
 	$(function () {
 	  $('[data-toggle="popover"]').popover()
 	})
-//Explanation div close button
+
 	$("#close-button").on("click", function(){
 		$("#explanation-div").fadeOut(500, function(){
 			$("#recommendations").fadeIn();
 		});
 	});
 
-// Code for recommendation buttons
+
 	$(".give-space").on("click", function(event){
 		let x = $("#screen_name_form").val();
 		if (x === ""){
@@ -24,29 +48,26 @@ $(document).ready(function() {
 		$("#screen_name_form").val(x);
 	});
 
-	// Generate tweets on enter keypress in the form
+	
 	$('#screen_name_form').keypress(function (e) {
   if (e.which == 13) {
-    $('#get_button').click(); //click the button (this way behavior is consistent with the button)
+    $('#get_button').click(); 
     return false;
   }
 });
 
 
-	//generate tweet button
+	
 	$("#get_button").on("click", function(){
 
-		//Show modal with error if input form empty
+		
 		if ($("#screen_name_form").val() === ""){
 			$("#emptyErrorModal").modal('show');
 
-		} else { //if not empty
+		} else { 
 			$('#get_button').prop('disabled', true);
 			$('#output-tweet-text').html("<i class=\"fa fa-cog fa-spin fa-fw\"></i>");
-			//if every twitter handle is correct, the callback from getTweets should
-			//display the result automatically, otherwise tweets array is checked after
-			//7 seconds: if it is still empty display an error, otherwise generate a tweet
-			//slide animation with different behavior for mobile and pc
+			
 			var input = $('#screen_name_form').val();
 			console.log(input)
 			/*if (shown) {
@@ -55,9 +76,10 @@ $(document).ready(function() {
 			shown = true;*/
 
 			$.ajax({
-				url: '/TweetGen/ajax/get_tweet/',
+				url: '/ajax/get_tweet/',
 				data: {
-					'input': input
+					'input': input,
+					'csrfmiddlewaretoken': csrftoken
 				},
 				dataType: 'json',
 				success: function(data){
@@ -93,7 +115,7 @@ $(document).ready(function() {
 		}
 
 	});
-	//custom twitter share button that includes generated tweet and #TweetGen hashtag
+	
 	$("#share-button").on("click", function(){
 		let tweet = $("#output-tweet-text").text();
 		//tweet = tweet.slice(1,tweet.length - 1);
