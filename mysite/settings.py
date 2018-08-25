@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -163,3 +164,5 @@ SOCIAL_AUTH_TWITTER_SECRET = "jk7fd9Uvc3S0t5xifnVVy5VJBeXKqLzOUr2GkPlMx4f7pG6qHk
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'index'
+
+django_heroku(locals())
