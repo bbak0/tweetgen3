@@ -165,4 +165,4 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'index'
 
-django_heroku(locals())
+django_heroku.settings(locals())
