@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+certifi = "==2017.11.5"
+chardet = "==3.0.4"
+defusedxml = "==0.5.0"
+djangorestframework = "==3.7.7"
+future = "==0.16.0"
+gunicorn = "==19.7.1"
+idna = "==2.6"
+jsonfield = "==2.0.2"
+markovify = "==0.7.0"
+oauthlib = "==2.0.6"
+"psycopg2" = "==2.7.3.2"
+"python3-openid" = "==3.1.0"
+pytz = "==2017.3"
+requests = "==2.18.4"
+requests-oauthlib = "==0.8.0"
+six = "==1.11.0"
+social-auth-app-django = "==2.0.0"
+social-auth-core = "==1.5.0"
+twitter = "==1.18.0"
+twitter-application-only-auth = "==0.3.3"
+"urllib3" = "==1.22"
+Django = "==2.0"
+PyJWT = "==1.5.3"
+Unidecode = "==0.4.21"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"

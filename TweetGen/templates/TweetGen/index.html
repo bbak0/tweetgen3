@@ -1,0 +1,170 @@
+
+{% load static %}
+<html class="no-js" lang="en">
+<head>
+  <title>TweetGen v2.0</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800">
+
+  <link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static "TweetGen/css/bootstrap.css" %}">
+  <link rel="stylesheet" href="{% static "TweetGen/css/style.css" %}">
+</head>
+<body>
+
+
+  <div class="container">
+    <a href="">
+      <div class = "text-center">
+        <img class = "img-fluid logo" src = "{% static "TweetGen/assets/logo3.png" %}"/>
+      </div>
+    </a>
+
+    <div class="row row-eq-height">
+
+
+
+      <div id="second-col" class="col-lg-4 order-lg-2 mb-lg-0">
+        <!-- Explanation div that covers recommendations div initially
+        <div id="explanation-div" class="jumbotron trim-jumbotron height-fix">
+          <h3> What is this? </h3>
+          <br>
+          <p>Using <b>coding</b> and <b>algorithms</b> this bot will generate new tweet
+            based on latest tweets from users you specify.</p>
+
+            <p></p>
+            <button type="button" id="close-button" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div> -->
+
+          <!-- To add a button just give it .give-space class and make its innerText = @twitter_handle -->
+          <div id="recommendations" class="jumbotron trim-jumbotron height-fix">
+            <h4> Most popular: </h4>
+            <div class="scroll-div">
+              <!--<button type="button" class="btn btn-secondary give-space">@realDonaldTrump</button>
+              <button type="button" class="btn btn-secondary give-space">@realDonaldTrunp</button>
+              <button type="button" class="btn btn-secondary give-space">@CNN</button>
+              <button type="button" class="btn btn-secondary give-space">@TheOnion</button>
+              <button type="button" class="btn btn-secondary give-space">@lmao</button>
+              <button type="button" class="btn btn-secondary give-space">@Arteezy</button>
+              <button type="button" class="btn btn-secondary give-space">@AdmiralBulldog</button>
+              <button type="button" class="btn btn-secondary give-space">@NASA</button>
+              <button type="button" class="btn btn-secondary give-space">@SnoopDogg</button>
+            -->
+            {% for recommendation in recommendations %}
+              <button type="button" class="btn btn-secondary give-space">@{{recommendation.screen_name}}</button>
+            {% endfor %}
+            </div>
+            <a tabindex="0" class="help-button btn btn-secondary" role="button" aria-label="Close" data-placement="left"  data-toggle="popover" data-trigger="focus" data-content="Click buttons below to add twitter handles to your input.">
+              <span aria-hidden="true">?</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Input div -->
+        <div class="col-lg-8 order-lg-1">
+          <div class="jumbotron trim-jumbotron no-margin" id="input-jumbotron">
+            <h1 id="quote-title" class="text-center">Enter Twitter handle(s) below:</h1>
+            <p class = "text-center">When entering multiple handles remember to separate them by commas.</p>
+            <input class="form-control" id="screen_name_form" placeholder="Enter twitter handle(s)">
+            <button type="button"
+            class="btn btn-secondary btn-block btn-lg extra-margin-top"
+            id="get_button">Generate Tweet</button>
+            <a tabindex="0" class="help-button btn btn-secondary" role="button" aria-label="Close" data-placement="left"  data-toggle="popover" data-trigger="focus"
+            data-content="This bot will generate a new tweet based on other user's previous tweets. If you are entering user that was previously unknown to the bot, generating might take a while so don't worry if it seems stuck.
+            Currently it will take into account only first 3 users from your input due to server limits.">
+              <span aria-hidden="true">?</span>
+            </a>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- Output div, initially hidden -->
+      <div class = "jumbotron trim-jumbotron hidden" id="output-jumbotron">
+        <h1 class = "text-center"> Here's what bot says: </h1>
+        <div class="alert alert-secondary extra-margin-top-big" id="tweet-output">
+          <h4 id="output-tweet-text" class="text-center">„Despite the constant negative press covfefe”</h4>
+        </div>
+
+
+
+        <button type="button"
+        class="btn btn-secondary btn-block btn-lg"
+        id="share-button">Share on Twitter!</button>
+
+
+      </div>
+    </div>
+    <a role="button" href= "/TweetGen/login"
+    class="btn btn-secondary btn-lg"
+    id="logout-button">Change User</a>
+
+
+    <!-- Modal indicating that user's input is empty -->
+    <div class="modal fade" id="emptyErrorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Input is empty</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p> Seems like you didn't enter any twitter handles. Please enter at least one to proceed.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal indicating error while fetching tweets -->
+    <div class="modal fade" id="noTweetsErrorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Couldn't retrieve tweets</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Bot was unable to retrieve any tweets. Please check Twitter handles or try again later.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <footer class="footer">
+      <div class="container">
+        <div class="custom-footer">
+
+          Created by ***. Robot icon in logo made by <a href="https://www.flaticon.com/authors/zlatko-najdenovski">Zlatko Najdenovski</a> from <a href="www.flaticon.com">www.flaticon.com</a>
+        </div>
+      </div>
+    </footer>
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" integrity="sha384-3ziFidFTgxJXHMDttyPJKDuTlmxJlwbSkojudK/CkRqKDOmeSbN6KLrGdrBQnT2n" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static "TweetGen/js/scripts.js" %}"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+    <script type="text/javascript" src="{% static "TweetGen/js/twitterFetcher.js" %}"></script>
+
+  </body>
+  </html>
