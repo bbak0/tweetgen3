@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800">
-
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
   <link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="{% static "TweetGen/css/bootstrap.css" %}">
   <link rel="stylesheet" href="{% static "TweetGen/css/style.css" %}">
@@ -45,16 +45,7 @@
           <div id="recommendations" class="jumbotron trim-jumbotron height-fix">
             <h4> Most popular: </h4>
             <div class="scroll-div">
-              <!--<button type="button" class="btn btn-secondary give-space">@realDonaldTrump</button>
-              <button type="button" class="btn btn-secondary give-space">@realDonaldTrunp</button>
-              <button type="button" class="btn btn-secondary give-space">@CNN</button>
-              <button type="button" class="btn btn-secondary give-space">@TheOnion</button>
-              <button type="button" class="btn btn-secondary give-space">@lmao</button>
-              <button type="button" class="btn btn-secondary give-space">@Arteezy</button>
-              <button type="button" class="btn btn-secondary give-space">@AdmiralBulldog</button>
-              <button type="button" class="btn btn-secondary give-space">@NASA</button>
-              <button type="button" class="btn btn-secondary give-space">@SnoopDogg</button>
-            -->
+
             {% for recommendation in recommendations %}
               <button type="button" class="btn btn-secondary give-space">@{{recommendation.screen_name}}</button>
             {% endfor %}
